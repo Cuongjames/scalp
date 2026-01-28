@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase Sản Phẩm - Premium Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Bảng màu Dark Luxury */
+            --bg-body: #0f1115;       /* Đen ánh xanh than */
+            --bg-card: #1e2129;       /* Xám tối */
+            --text-main: #ffffff;     /* Trắng */
+            --text-sub: #a0a0a0;      /* Xám nhạt */
+            --accent: #00d2ff;        /* Xanh Cyan nổi bật (hoặc đổi thành Gold #d4af37) */
+            --gradient: linear-gradient(45deg, #00d2ff, #3a7bd5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; /* Chữ màu gradient */
+            font-weight: 800;
+        }
+
+        header p {
+            color: var(--text-sub);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- CONTAINER LƯỚI --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            /* Tự động chia cột linh hoạt */
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* --- THẺ CARD SẢN PHẨM --- */
+        .report-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Hiệu ứng nảy nhẹ */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Hiệu ứng khi di chuột vào (Hover) */
+        .report-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 210, 255, 0.2); /* Đổ bóng màu xanh */
+            border-color: var(--accent);
+        }
+
+        /* Số thứ tự nghệ thuật */
+        .card-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            color: var(--accent);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            z-index: 10;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Khung Video */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* Tỉ lệ dọc (TikTok/Reels) */
+            background: #000;
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        /* Nội dung bên dưới */
+        .card-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 5px;
+            /* Thay đổi để giống nút bấm */
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+        
+        .card-title:hover {
+            color: var(--accent);
+        }
+        
+        .card-title:active {
+            transform: scale(0.98);
+        }
+        
+        /* Đường gạch dưới nhỏ trang trí */
+        .card-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--gradient);
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- PHẦN MỚI THÊM: Ô CHÚ THÍCH --- */
+        .annotation-box {
+            display: none; /* Ẩn mặc định */
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--text-sub);
+            border-radius: 8px;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            text-align: left;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .container { gap: 20px; padding: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Kết Quả Thực Tế</h1>
+        <p>Bộ sưu tập mẫu tóc & màu nhuộm xu hướng</p>
+    </header>
+
+    <main class="container">
+
+        <article class="report-card">
+            <span class="card-number">01</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="https://uploads.onecompiler.io/44berpchu/44bvv98me/Screenshot%20(210).png">
+                    <source src="https://res.cloudinary.com/dlky8nqlc/video/upload/v1769508682/Da_%C4%91%E1%BA%A7u_D%E1%BA%A7u_2_co33vj.mp4" type="video/mp4"> </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 01</h3>
+                <div class="annotation-box">Trường hợp da đầu trước khi điều trị thuộc da đầu dầu nhạy cảm. Quá trình điều trị mang tính dài hạn
+                </div>
+            </div>
+        </article> 
+
+        <article class="report-card">
+            <span class="card-number">02</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 02</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">03</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 03</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">04</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 04</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">05</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 05</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">06</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 06</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">07</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 07</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">08</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 08</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">09</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 09</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">10</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 10</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">11</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 11</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">12</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 12</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">13</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 13</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">14</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 14</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">15</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 15</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">16</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 16</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">17</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 17</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">18</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 18</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">19</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 19</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+        <article class="report-card">
+            <span class="card-number">20</span>
+            <div class="video-wrapper">
+                <video controls playsinline preload="none" poster="">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title" onclick="toggleAnnotation(this)">Người Mẫu 20</h3>
+                <div class="annotation-box">
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Báo Cáo Từ Phòng Kỹ Thuật</p>
+    </footer>
+
+    <script>
+        function toggleAnnotation(element) {
+            // Tìm thẻ div .annotation-box nằm ngay sau thẻ tiêu đề được click
+            var content = element.nextElementSibling;
+            
+            // Kiểm tra trạng thái hiển thị và thay đổi
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>
